@@ -2,15 +2,16 @@ let i;
 let r;
 let n;
 let cornerPoints = []
-let prevCorner;
 let currentPos;
+let previousCorner;
 
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(1000, 1000);
   frameRate(120);
   background(0);
   stroke(255);
-  strokeWeight(2);
+  strokeWeight(1);
+  angleMode(DEGREES);
 
   i = 0;
   r = width / 2 - 20;
@@ -20,26 +21,23 @@ function setup() {
     cornerPoints.push({x: r * Math.cos(2 * Math.PI * i / n), y: r * Math.sin(2 * Math.PI * i / n)});
   }
 
-  console.log(cornerPoints);
-  currentPos = {x: 2 * (width / 3), y: height - height / 4};
+  currentPos = {x: 0, y: 0};
+  prevCorner = 0;
 }
 
 function draw() {
-  if (i === 0) {
-    drawCornerPoints();
-    drawCurrentPos();
-  } else {
-    let randomInt = rollTheDice();
-    // currentPos.x = calcX(cornerPoints[randomInt]);
-    // currentPos.y = calcY(cornerPoints[randomInt]);
-    // drawCurrentPos();
+  let randomInt = previousCorner;
+
+  while (randomInt === previousCorner) {
+    randomInt = rollTheDice();
   }
 
+  previousCorner = randomInt;
+  currentPos.x = calcX(cornerPoints[randomInt]);
+  currentPos.y = calcY(cornerPoints[randomInt]);
+  drawCurrentPos();
+
   i++;
-}
-
-function calcUpperRight() {
-
 }
 
 function calcX(cornerPoint) {
@@ -52,21 +50,12 @@ function calcY(cornerPoint) {
   return cornerPoint.y - diff / 2;
 }
 
-function drawCornerPoints() {
+function drawCurrentPos() {
   push();
   translate(width / 2, height / 2);
-  angleMode(DEGREES);
   rotate(-90);
-  point(cornerPoints[0].x, cornerPoints[0].y);
-  point(cornerPoints[1].x, cornerPoints[1].y);
-  point(cornerPoints[2].x, cornerPoints[2].y);
-  point(cornerPoints[3].x, cornerPoints[3].y);
-  point(cornerPoints[4].x, cornerPoints[4].y);
-  pop();
-}
-
-function drawCurrentPos() {
   point(currentPos.x, currentPos.y);
+  pop();
 }
 
 function rollTheDice() {

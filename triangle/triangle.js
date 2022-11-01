@@ -23,7 +23,6 @@ function setup() {
 function draw() {
   if (i === 0) {
     drawCornerPoints();
-    drawCurrentPos();
   } else {
     let randomInt = rollTheDice();
     currentPos.x = calcX(cornerPoints[randomInt]);
